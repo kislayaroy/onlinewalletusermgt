@@ -1,4 +1,4 @@
-package org.capg.usermgt.entities.exception;
+package org.capg.usermgt.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

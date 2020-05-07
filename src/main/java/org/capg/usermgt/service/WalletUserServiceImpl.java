@@ -1,12 +1,12 @@
-package org.capg.usermgt.entities.service;
+package org.capg.usermgt.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.capg.usermgt.dao.WalletUserDao;
 import org.capg.usermgt.entities.WalletUser;
-import org.capg.usermgt.entities.exception.UserIdNotFoundException;
-import org.capg.usermgt.entities.exception.UserNotFoundException;
+import org.capg.usermgt.exception.UserIdNotFoundException;
+import org.capg.usermgt.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

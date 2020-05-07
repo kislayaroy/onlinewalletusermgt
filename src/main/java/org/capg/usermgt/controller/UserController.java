@@ -1,8 +1,8 @@
-package org.capg.usermgt.entities.controller;
+package org.capg.usermgt.controller;
 
 import java.util.List;
 import org.capg.usermgt.entities.WalletUser;
-import org.capg.usermgt.entities.service.IWallerUserService;
+import org.capg.usermgt.service.IWallerUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

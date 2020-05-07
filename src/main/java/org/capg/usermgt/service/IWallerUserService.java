@@ -1,4 +1,4 @@
-package org.capg.usermgt.entities.service;
+package org.capg.usermgt.service;
 
 import java.util.List;
 
