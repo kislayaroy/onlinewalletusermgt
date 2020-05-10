@@ -14,5 +14,5 @@ public interface IWallerUserService {
 	 
 	 WalletUser updateUser(WalletUser user);
 	 
-	 void deleteUser(int userId);
+	 boolean deleteUser(int userId);
 }

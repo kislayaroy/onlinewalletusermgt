@@ -1,16 +1,6 @@
-package org.capg.usermgt.entities;
+package org.capg.usermgt.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-@Entity
-@Table(name= "walletusers")
-public class WalletUser {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+public class WalletUserDto {
 	private int userId;
 	private String userName;
 	private String password;
@@ -60,23 +50,4 @@ public class WalletUser {
 	public void setAccountBalance(double accountBalance) {
 		this.accountBalance = accountBalance;
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + userId;
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null||getClass() != obj.getClass())
-			return false;
-		WalletUser other = (WalletUser) obj;
-		if (userId != other.userId)
-			return false;
-		return true;
-	}
-	
 }

@@ -44,13 +44,8 @@ public class WalletUserServiceImpl implements IWallerUserService {
 	public WalletUser updateUser(WalletUser user) {
 		Optional<WalletUser> optional = userdao.findById(user.getUserId());
 		if(optional.isPresent()) {
-			WalletUser userUpdate= optional.get();
-			userUpdate.setUserId(user.getUserId());
-			userUpdate.setUserName(user.getUserName());
-			userUpdate.setPassword(user.getPassword());
-			userUpdate.setPhoneNumber(user.getPhoneNumber());
-			userdao.save(userUpdate);
-			return userUpdate;
+			userdao.save(user);
+			return user;
 		}
 		else {
 			throw new UserIdNotFoundException("User id not found ="+user.getUserId());
@@ -58,7 +53,7 @@ public class WalletUserServiceImpl implements IWallerUserService {
 	}
 
 	@Override
-	public void deleteUser(int userId) {
+	public boolean deleteUser(int userId) {
 		Optional<WalletUser> optional=userdao.findById(userId);
 		if(optional.isPresent()) {
 			userdao.delete(optional.get());
@@ -66,6 +61,7 @@ public class WalletUserServiceImpl implements IWallerUserService {
 		else {
 			throw new UserNotFoundException("User not found for id= "+userId);
 		}
+		return true;
 		
 	}
 }
