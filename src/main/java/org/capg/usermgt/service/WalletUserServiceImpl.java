@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class WalletUserServiceImpl implements IWallerUserService {
+public class WalletUserServiceImpl implements IWalletUserService {
 
 	@Autowired
 	private WalletUserDao userdao;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.capg.usermgt.entities.WalletUser;
 
-public interface IWallerUserService {
+public interface IWalletUserService {
 
 	 List<WalletUser> getAllUsers();
 	

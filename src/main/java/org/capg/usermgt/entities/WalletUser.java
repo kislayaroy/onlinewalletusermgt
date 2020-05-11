@@ -1,5 +1,7 @@
 package org.capg.usermgt.entities;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -62,10 +64,7 @@ public class WalletUser {
 	}
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + userId;
-		return result;
+		return Objects.hash(userId);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -74,9 +73,7 @@ public class WalletUser {
 		if (obj == null||getClass() != obj.getClass())
 			return false;
 		WalletUser other = (WalletUser) obj;
-		if (userId != other.userId)
-			return false;
-		return true;
+		return userId == other.userId;
 	}
 	
 }

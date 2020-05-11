@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.capg.usermgt.dto.WalletUserDto;
 import org.capg.usermgt.entities.WalletUser;
-import org.capg.usermgt.service.IWallerUserService;
+import org.capg.usermgt.service.IWalletUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
 	@Autowired
-	private IWallerUserService userservice;
+	private IWalletUserService userservice;
 	
 	
 	  public WalletUser convert(WalletUserDto dto) {
@@ -63,6 +63,7 @@ public class UserController {
 		user=userservice.createUser(user);
 		ResponseEntity<WalletUser> response = new ResponseEntity<>(user,HttpStatus.OK);
 		return response;
+	}
 	
 	//get user by id
 	@GetMapping("/get/{id}")
@@ -73,7 +74,7 @@ public class UserController {
 	    return response;
 		}
 	//update user
-	@PutMapping("/users/{id}")
+	@PutMapping("/get/{id}")
 	public ResponseEntity<WalletUserDto> updateUser(@PathVariable(value = "id") int userId,@RequestBody WalletUserDto dto){
 		WalletUser walletUser=userservice.findById(userId);
 		walletUser.setUserId(walletUser.getUserId());
@@ -89,7 +90,7 @@ public class UserController {
 			return response;
 			}
 	//deleted user by id
-	@DeleteMapping("/users/{id}")
+	@DeleteMapping("/get/{id}")
 	public ResponseEntity<Boolean> deleteUser(@PathVariable int userId){
 		boolean result=	userservice.deleteUser(userId);
 		ResponseEntity<Boolean>response=new ResponseEntity<>(result, HttpStatus.OK);
