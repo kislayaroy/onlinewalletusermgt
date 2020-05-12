@@ -27,39 +27,32 @@ private EntityManager entityManager;
 
 @Test
 public void testCreateUser_1() {
-	boolean available = true;
 	int id= 1, accId=1234;
 	WalletUser user =new WalletUser();
 	user.setUserId(id);
-	user.setAccountId(accId);
 	WalletUser result = walletService.createUser(user);
 	List<WalletUser> fetched = entityManager.createQuery("user").getResultList();
 	Assertions.assertEquals(1,fetched.size());
 	WalletUser expected= fetched.get(0);
 	Assertions.assertEquals(expected, result);
 	Assertions.assertEquals(id, expected.getUserId());
-	Assertions.assertEquals(accId, expected.getAccountId());;
 }
 
 @Test
 public void testCreateUser_2() {
-	boolean available = true;
 	int id= 2, accId = 4321;
 	WalletUser user =new WalletUser ();
 	user.setUserId(id);
-	user.setAccountId(accId);
 	user =entityManager.merge(user);
 	int newId= 2 , newAccId = 4321;
 	boolean newStatus = false;
 	user.setUserId(newId);
-	user.setAccountId(newAccId);
 	WalletUser result = walletService.createUser(user);
 	List<WalletUser> fetched = entityManager.createQuery("user").getResultList();
 	Assertions.assertEquals(1, fetched.size());
 	WalletUser expected = fetched.get(0);
     Assertions.assertEquals(expected, result);
     Assertions.assertEquals(newId, expected.getUserId());
-    Assertions.assertEquals(newAccId, expected.getAccountId());
 }
 
 @Test
@@ -74,7 +67,6 @@ public void testFindByUserId_2() {
 	int id=1, accId=123;
 	WalletUser user = new WalletUser();
     user.setUserId(id);
-    user.setAccountId(accId);
     user = entityManager.merge(user);
     int userId = user.getUserId();
     WalletUser result = walletService.findById(id);
@@ -83,6 +75,5 @@ public void testFindByUserId_2() {
     //
     Assertions.assertEquals(user, result);
     Assertions.assertEquals(id, user.getUserId());
-    Assertions.assertEquals(accId, user.getAccountId());
 }
 }

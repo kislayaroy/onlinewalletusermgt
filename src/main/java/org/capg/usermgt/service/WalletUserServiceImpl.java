@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.capg.usermgt.dao.WalletUserDao;
+import org.capg.usermgt.entities.WalletAccount;
 import org.capg.usermgt.entities.WalletUser;
 import org.capg.usermgt.exception.UserIdNotFoundException;
 import org.capg.usermgt.exception.UserNotFoundException;
@@ -17,15 +18,20 @@ public class WalletUserServiceImpl implements IWalletUserService {
 
 	@Autowired
 	private WalletUserDao userdao;
+	@Autowired
+	private WalletAccountServiceImpl accountService;
 	
 	@Override
 	public List<WalletUser> getAllUsers() {
-		return userdao.findAll();
+		List<WalletUser> users =userdao.findAll();
+		return users;
 	}
 
 	@Override
 	public WalletUser createUser(WalletUser user) {
-		return userdao.save(user);
+	    user =userdao.save(user);
+		addAccount(user.getUserId());
+		return user;
 	}
 
 	@Override
@@ -35,9 +41,7 @@ public class WalletUserServiceImpl implements IWalletUserService {
 			WalletUser user=optional.get();
 			return user;
 		}
-		else {
 			throw new UserNotFoundException("User not found for id= "+userId);
-        }
         }
 
 	@Override
@@ -47,9 +51,7 @@ public class WalletUserServiceImpl implements IWalletUserService {
 			userdao.save(user);
 			return user;
 		}
-		else {
 			throw new UserIdNotFoundException("User id not found ="+user.getUserId());
-		}
 	}
 
 	@Override
@@ -63,5 +65,14 @@ public class WalletUserServiceImpl implements IWalletUserService {
 		}
 		return true;
 		
+	}
+
+	@Override
+	public WalletAccount addAccount(int userId) {
+		WalletUser user = userdao.findById(userId).get();
+		WalletAccount account = accountService.addAccount(userId);
+		user.setAccount(account);
+		userdao.save(user);
+		return account;
 	}
 }

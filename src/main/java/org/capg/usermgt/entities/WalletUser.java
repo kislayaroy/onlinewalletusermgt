@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
@@ -12,14 +11,27 @@ import javax.persistence.Table;
 public class WalletUser {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	private int userId;
 	private String userName;
 	private String password;
 	private String phoneNumber;
 	private String loginName;
-	private int accountId;
-	private double accountBalance;
+	WalletAccount account;
+	
+	public WalletUser() {
+		super();
+	}
+	public WalletUser(int userId, String userName, String password, String phoneNumber, String loginName,
+			WalletAccount account) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.password = password;
+		this.phoneNumber = phoneNumber;
+		this.loginName = loginName;
+		this.account = account;
+	}
 	public int getUserId() {
 		return userId;
 	}
@@ -50,17 +62,15 @@ public class WalletUser {
 	public void setLoginName(String loginName) {
 		this.loginName = loginName;
 	}
-	public int getAccountId() {
-		return accountId;
+	public WalletAccount getAccount() {
+		return account;
 	}
-	public void setAccountId(int accountId) {
-		this.accountId = accountId;
+	public void setAccount(WalletAccount account) {
+		this.account = account;
 	}
-	public double getAccountBalance() {
-		return accountBalance;
-	}
-	public void setAccountBalance(double accountBalance) {
-		this.accountBalance = accountBalance;
+	@Override
+	public String toString() {
+		return "User [userId= " + userId +" userName= " +userName + " password= " + password + " phoneNumber= "+ phoneNumber +" loginName= "+ loginName + " Account= " + account + "]";
 	}
 	@Override
 	public int hashCode() {

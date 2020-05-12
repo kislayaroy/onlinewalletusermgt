@@ -6,8 +6,19 @@ public class WalletUserDto {
 	private String password;
 	private String phoneNumber;
 	private String loginName;
-	private int accountId;
-	private double accountBalance;
+	
+	
+	public WalletUserDto() {
+		super();
+	}
+	public WalletUserDto(int userId, String userName, String password, String phoneNumber, String loginName) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.password = password;
+		this.phoneNumber = phoneNumber;
+		this.loginName = loginName;
+	}
 	public int getUserId() {
 		return userId;
 	}
@@ -38,16 +49,10 @@ public class WalletUserDto {
 	public void setLoginName(String loginName) {
 		this.loginName = loginName;
 	}
-	public int getAccountId() {
-		return accountId;
+	@Override
+	public String toString() {
+		return "WalletUserDto [userId=" + userId + ", userName=" + userName + ", password=" + password
+				+ ", phoneNumber=" + phoneNumber + ", loginName=" + loginName + "]";
 	}
-	public void setAccountId(int accountId) {
-		this.accountId = accountId;
-	}
-	public double getAccountBalance() {
-		return accountBalance;
-	}
-	public void setAccountBalance(double accountBalance) {
-		this.accountBalance = accountBalance;
-	}
+
 }
