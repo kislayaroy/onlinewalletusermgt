@@ -19,19 +19,6 @@ public class WalletUser {
 	private String loginName;
 	WalletAccount account;
 	
-	public WalletUser() {
-		super();
-	}
-	public WalletUser(int userId, String userName, String password, String phoneNumber, String loginName,
-			WalletAccount account) {
-		super();
-		this.userId = userId;
-		this.userName = userName;
-		this.password = password;
-		this.phoneNumber = phoneNumber;
-		this.loginName = loginName;
-		this.account = account;
-	}
 	public int getUserId() {
 		return userId;
 	}

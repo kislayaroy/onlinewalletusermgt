@@ -6,8 +6,6 @@ import org.capg.usermgt.entities.WalletAccount;
 import org.capg.usermgt.entities.WalletUser;
 
 public interface IWalletUserService {
-
-	 WalletAccount addAccount(int userId);
 	 
 	 List<WalletUser> getAllUsers();
 	
@@ -17,5 +15,7 @@ public interface IWalletUserService {
 	 
 	 WalletUser updateUser(WalletUser user);
 	 
-	 boolean deleteUser(int userId);
+	 void deleteUser(int userId);
+
+	 WalletAccount findAccountByUserId(int userId);
 }

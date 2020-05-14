@@ -18,16 +18,6 @@ public class WalletAccount {
   private int accountId;
   private double accountBalance;
   Status status;
-
-public WalletAccount() {
-	super();
-}
-public WalletAccount(int accountId, double accountBalance, Status status) {
-	super();
-	this.accountId = accountId;
-	this.accountBalance = accountBalance;
-	this.status = status;
-}
 public int getAccountId() {
 	return accountId;
 }
