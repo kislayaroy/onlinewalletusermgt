@@ -7,6 +7,7 @@ import org.capg.usermgt.dao.WalletAccountDao;
 import org.capg.usermgt.dao.WalletUserDao;
 import org.capg.usermgt.entities.WalletAccount;
 import org.capg.usermgt.entities.WalletUser;
+import org.capg.usermgt.exception.InsufficientBalanceException;
 import org.capg.usermgt.exception.UserIdNotFoundException;
 import org.capg.usermgt.exception.UserNotFoundException;
 import org.capg.usermgt.util.Status;
@@ -35,7 +36,7 @@ public class WalletUserServiceImpl implements IWalletUserService {
 		account.setAccountBalance(0);
 		account.setStatus(Status.ACTIVE);
 		account = accountDao.save(account);
-		user.setAccount(account);
+		//user.setAccount(account);
 	    user =userDao.save(user);
 		return user;
 	}
@@ -65,6 +66,32 @@ public class WalletUserServiceImpl implements IWalletUserService {
 			return user;
 		}
 			throw new UserIdNotFoundException("User id not found ="+user.getUserId());
+	}
+
+	@Override
+	public WalletUser credit(int userId, double amount){
+		WalletUser user=findById(userId);
+	    WalletAccount account=user.getAccount();
+	    double previousBalance=account.getAccountBalance();
+	    double newBalance=previousBalance+amount;
+	    account.setAccountBalance(newBalance);
+	    account=accountDao.save(account);
+	    return user;
+	}
+
+
+	@Override
+	public WalletUser debit(int userId, double amount){
+		WalletUser user=findById(userId);
+		WalletAccount account=user.getAccount();
+		double previousBalance=account.getAccountBalance();
+		if(previousBalance<amount){
+			throw new InsufficientBalanceException("insufficient balance");
+		}
+		double newBalance=previousBalance-amount;
+		account.setAccountBalance(newBalance);
+		account=accountDao.save(account);
+		return user;
 	}
 
 	@Override

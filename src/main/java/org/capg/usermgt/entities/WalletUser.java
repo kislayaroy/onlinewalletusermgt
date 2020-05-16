@@ -2,10 +2,8 @@ package org.capg.usermgt.entities;
 
 import java.util.Objects;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 @Entity
 @Table(name= "walletusers")
 public class WalletUser {
@@ -17,7 +15,9 @@ public class WalletUser {
 	private String password;
 	private String phoneNumber;
 	private String loginName;
-	WalletAccount account;
+
+	@OneToOne
+	private WalletAccount account;
 	
 	public int getUserId() {
 		return userId;

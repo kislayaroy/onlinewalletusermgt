@@ -1,12 +1,13 @@
 package org.capg.usermgt.controller;
 
 import java.util.List;
+import java.util.Map;
 
-import org.capg.usermgt.dto.CreateUserRequest;
-import org.capg.usermgt.dto.UpdateUserRequest;
+import org.capg.usermgt.dto.TransactionDetails;
 import org.capg.usermgt.dto.UserDetails;
-import org.capg.usermgt.entities.WalletAccount;
 import org.capg.usermgt.entities.WalletUser;
+import org.capg.usermgt.exception.InsufficientBalanceException;
+import org.capg.usermgt.exception.UserNotFoundException;
 import org.capg.usermgt.service.IWalletUserService;
 import org.capg.usermgt.util.AccountUtil;
 import org.slf4j.Logger;
@@ -28,59 +29,118 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-	private static final Logger Log = LoggerFactory.getLogger(UserController.class);
-	@Autowired
-	private IWalletUserService userservice;
-	//get all user api
-	@GetMapping()
-	public ResponseEntity<List<WalletUser>> getAllUsers(){
-		List<WalletUser> userList=userservice.getAllUsers();
-	    ResponseEntity<List<WalletUser>> response= new ResponseEntity<>(userList, HttpStatus.OK);
-	    return response;
-	}
-	
-	//create user
-	@PostMapping("/add")
-	public ResponseEntity<UserDetails> createUser(@RequestBody CreateUserRequest requestData) {
-		WalletUser user=AccountUtil.convertToUser(requestData);
-		user=userservice.createUser(user);
-		UserDetails userDetails= AccountUtil.convertFromUser(user);
-		ResponseEntity<UserDetails> response = new ResponseEntity<>(userDetails,HttpStatus.OK);
-		return response;
-	}
-	//get user by id
-	@GetMapping("/get/{id}")
-	public ResponseEntity<UserDetails> getUserById(@PathVariable("id") int userId){
-		WalletUser user=userservice.findById(userId);
-		UserDetails userDetails=AccountUtil.convertFromUser(user);
-		ResponseEntity<UserDetails> response =new ResponseEntity<>(userDetails,HttpStatus.OK);
-	    return response;
-		}
-	
-	//update user
-	@PutMapping("/get/{id}")
-	public ResponseEntity<UserDetails> updateUser(@PathVariable("id") int userId,
-			                                        @RequestBody UpdateUserRequest request){
-		WalletUser user=userservice.findById(userId);
-		AccountUtil.setDetails(user,request);
-		user = userservice.updateUser(user);
-		UserDetails userDetails=AccountUtil.convertToUser(user);
-		ResponseEntity<UserDetails> response=new ResponseEntity<>(userDetails,HttpStatus.OK);
-			return response;
-			}
-	//deleted user by id
-	@DeleteMapping("/get/{id}")
-	public ResponseEntity<Boolean> deleteUser(@PathVariable int userId){
-		userservice.deleteUser(userId);
-		ResponseEntity<Boolean>response=new ResponseEntity<>(true, HttpStatus.OK);
-		return response;
-	}
-	
-	@ExceptionHandler(Throwable.class)
-	public ResponseEntity<String> handleAll(Throwable e){
-		Log.error("exception caught", e);
-		String msg = e.getMessage();
-		ResponseEntity<String>response = new ResponseEntity<>(msg,HttpStatus.INTERNAL_SERVER_ERROR);
-		return response;
-	}
+    private static final Logger Log = LoggerFactory.getLogger(UserController.class);
+    @Autowired
+    private IWalletUserService userService;
+
+    //get all user api
+    @GetMapping
+    public ResponseEntity<List<WalletUser>> getAllUsers() {
+        List<WalletUser> userList = userService.getAllUsers();
+        ResponseEntity<List<WalletUser>> response = new ResponseEntity<>(userList, HttpStatus.OK);
+        return response;
+    }
+
+    //create user
+    @PostMapping("/add")
+    public ResponseEntity<UserDetails> createUser(@RequestBody Map<String, Object> requestData) {
+        WalletUser user = new WalletUser();
+        AccountUtil.setRequestData(user, requestData);
+        user = userService.createUser(user);
+        UserDetails userDetails = AccountUtil.userDetails(user);
+        ResponseEntity<UserDetails> response = new ResponseEntity<>(userDetails, HttpStatus.OK);
+        return response;
+    }
+
+    //get user by id
+    @GetMapping("/get/{id}")
+    public ResponseEntity<UserDetails> getUserById(@PathVariable("id") int userId) {
+        WalletUser user = userService.findById(userId);
+        UserDetails userDetails = AccountUtil.userDetails(user);
+        ResponseEntity<UserDetails> response = new ResponseEntity<>(userDetails, HttpStatus.OK);
+        return response;
+    }
+
+    //update user
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserDetails> updateUser(@PathVariable("id") int userId,
+                                                  @RequestBody Map<String, Object> requestData) {
+        WalletUser user = userService.findById(userId);
+        AccountUtil.setRequestData(user, requestData);
+        user = userService.updateUser(user);
+        UserDetails userDetails = AccountUtil.userDetails(user);
+        ResponseEntity<UserDetails> response = new ResponseEntity<>(userDetails, HttpStatus.OK);
+        return response;
+    }
+
+    //deleted user by id
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable int userId) {
+        userService.deleteUser(userId);
+        ResponseEntity<Boolean> response = new ResponseEntity<>(true, HttpStatus.OK);
+        return response;
+    }
+
+    @PutMapping("/{userId}/credit")
+    public ResponseEntity<UserDetails> credit(@RequestBody Map<String, Object> requestData) {
+        int userId = (int) requestData.get("userId");
+        String amountText=requestData.get("amount").toString();
+        Double amount = Double.parseDouble(amountText);
+        WalletUser user = userService.credit(userId, amount);
+        UserDetails userDetails = AccountUtil.userDetails(user);
+        TransactionDetails transactionDetails=new TransactionDetails();
+        transactionDetails.setAmount(amount);
+        transactionDetails.setUserId(userId);
+        transactionDetails.setTransactionType("credit");
+        sendTransactionDetails(transactionDetails);
+        ResponseEntity<UserDetails> response = new ResponseEntity<>(userDetails, HttpStatus.OK);
+        return response;
+    }
+
+    @PutMapping("/{userId}/debit")
+    public ResponseEntity<UserDetails> debit(@RequestBody Map<String, Object> requestData) {
+        int userId = (int) requestData.get("userId");
+        String amountText=requestData.get("amount").toString();
+        Double amount = Double.parseDouble(amountText);
+        WalletUser user = userService.debit(userId, amount);
+        UserDetails userDetails = AccountUtil.userDetails(user);
+        TransactionDetails transactionDetails=new TransactionDetails();
+        transactionDetails.setAmount(amount);
+        transactionDetails.setUserId(userId);
+        transactionDetails.setTransactionType("debit");
+        sendTransactionDetails(transactionDetails);
+
+        ResponseEntity<UserDetails> response = new ResponseEntity<>(userDetails, HttpStatus.OK);
+        return response;
+    }
+
+    /**
+     *
+     * sends Transaction details to transaction service after integration
+     */
+    public void sendTransactionDetails(TransactionDetails details){
+
+    }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<String>handleInsufficientBalance(InsufficientBalanceException ex){
+       String msg=ex.getMessage();
+       ResponseEntity<String>response=new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);
+       return response;
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
+        String msg = ex.getMessage();
+        ResponseEntity<String> response = new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        return response;
+    }
+
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<String> handleAll(Throwable e) {
+        Log.error("exception caught", e);
+        String msg = e.getMessage();
+        ResponseEntity<String> response = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+        return response;
+    }
 }
