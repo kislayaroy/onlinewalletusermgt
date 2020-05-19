@@ -1,0 +1,63 @@
+<div *ngIf="!isEditMode">
+    <h2>Please find below your account details!</h2>
+    <div class="input-margin">
+        <label> UserName : </label>
+        <span>
+            <strong> {{ user.userName }} </strong>
+        </span>
+    </div>
+    <div class="input-margin">
+        <label> LoginName : </label>
+        <span>
+            <strong> {{ user.loginName }} </strong>
+        </span>
+    </div>
+    <div class="input-margin">
+        <label> Password : </label>
+        <span>
+            <strong> {{ user.password }} </strong>
+        </span>
+    </div>
+    <div class="input-margin">
+        <label> PhoneNumber : </label>
+        <span>
+            <strong> {{ user.phoneNumber }} </strong>
+        </span>
+    </div>
+    <div class="input-margin">
+        <label> AccountId : </label>
+        <span>
+            <strong> {{ account.accoundId }} </strong>
+        </span>
+    </div>
+    <div class="input-margin">
+        <label> AccountBalance : </label>
+        <span>
+            <strong> {{ account.accountBalance }} </strong>
+        </span>
+    </div>
+
+    <button type="submit" class="btn btn-success input-margin" (click)="updateDetails()">Update AccountDetails</button> &nbsp;&nbsp;
+    Note: If you want to change your account details, please click on button!
+</div>
+<div *ngIf="isEditMode">
+    <h2> Edit Account Details! </h2>
+    <div class="input-margin">
+        <label> UserName : </label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="text" value=" {{ user.userName }}" id="userName">
+    </div>
+    <div class="input-margin">
+        <label> LoginName : </label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="text" value=" {{ user.loginName }}" id="loginName">
+    </div>
+    <div class="input-margin">
+        <label> Password : </label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="text" value=" {{ user.password }}" id="loginName">
+    </div>
+    <div class="input-margin">
+        <label> PhoneNumber : </label> &nbsp;&nbsp;
+        <input type="text" value=" {{ user.phoneNumber }}" id="loginName">
+    </div>
+
+    <button type="submit" class="btn btn-success input-margin" (click)="updateDetails()">Update Account Details</button>
+</div>
